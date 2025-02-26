@@ -110,12 +110,21 @@ local function checkKey()
     end
 end
 
--- Event-Listener für den "Get Key"-Button (Leitet den Benutzer zu einer Webseite)
-getKeyButton.MouseButton1Click:Connect(function()
-    -- Hier URL zu der Webseite einfügen, die den Key anzeigt und validiert
-    local url = "https://deinewebseite.com" -- Ersetze dies mit deiner tatsächlichen URL
-    game:GetService("GuiService"):OpenBrowserWindow(url)
-end)
+-- Funktion zum Erhalten eines zufälligen Keys und Weiterleitung zur Website
+local function getKey()
+    local randomIndex = math.random(1, #allowedKeys)
+    local randomKey = allowedKeys[randomIndex]
 
--- Event-Listener für den "Key prüfen"-Button
+    -- Zeige den zufällig generierten Key an
+    statusLabel.Text = "Dein Key: " .. randomKey
+    statusLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
+
+    -- Weiterleitung zur Website
+    wait(1)  -- Warte eine Sekunde, bevor der Benutzer zur Website weitergeleitet wird
+    setclipboard(randomKey)  -- Kopiere den Key in die Zwischenablage
+    game:GetService("MarketplaceService"):PromptGamePassPurchase(player, 123456)  -- Beispiel für eine Weiterleitung
+end
+
+-- Event-Listener für die Buttons
 checkButton.MouseButton1Click:Connect(checkKey)
+getKeyButton.MouseButton1Click:Connect(getKey)
